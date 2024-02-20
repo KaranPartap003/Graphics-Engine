@@ -316,23 +316,23 @@ int main()
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.1f);
 	mainLight = DirectionalLight(2048, 2048,
-								0.8f, 0.8f, 1.0f,
-								0.0f, 0.5f, 
-								10.0f, -5.0f, 1.0f);
+					0.8f, 0.8f, 1.0f,
+					0.0f, 0.5f, 
+					10.0f, -5.0f, 1.0f);
 	
 	pointLights[0] = PointLight(1024, 1024,
-								0.1, 100,
-							    1.0f, 1.0f, 1.0f,
-								0.2f, 2.0f,
-								-2.0f, 0.0f, -3.0f,
-								0.3f, 0.1f, 0.1f);
+				    0.1, 100,
+				    1.0f, 1.0f, 1.0f,
+				    0.2f, 2.0f,
+				    -2.0f, 0.0f, -3.0f,
+				    0.3f, 0.1f, 0.1f);
 	pointLightCount++;
 	pointLights[1] = PointLight(1024, 1024,
-								0.1, 100,
-								1.0f, 1.0f, 1.0f,
-								0.2f, 2.0f,
-								-4.0f, 0.0f, 0.0f,
-								0.3f, 0.1f, 0.1f);
+					0.1, 100,
+					1.0f, 1.0f, 1.0f,
+					0.2f, 2.0f,
+					-4.0f, 0.0f, 0.0f,
+					0.3f, 0.1f, 0.1f);
 	//pointLightCount++;
 	
 	spotLights[0] = SpotLight(1024, 1024,
@@ -420,7 +420,7 @@ int main()
 		}
 		RenderPass(projection, camera.calculateViewMatrix());
 		ImGui::Begin("Hello, world!");                         
-		ImGui::Text("sesbian lex");
+		ImGui::Text("helo again");
 		//add imgui code here:
 
 		ImGui::End();
