@@ -336,22 +336,22 @@ int main()
 	//pointLightCount++;
 	
 	spotLights[0] = SpotLight(1024, 1024,
-							  0.1, 100, 
-							  1.0f, 1.0f, 1.0f,
-							  0.0f, 0.0f,
-							  4.0f, 0.0f, 0.0f,
-							  0.0f, -1.0f, 0.0f,
-							  0.3f, 0.1f, 0.1f, 
-							  20.0f);
+				  0.1, 100, 
+				  1.0f, 1.0f, 1.0f,
+				  0.0f, 0.0f,
+				  4.0f, 0.0f, 0.0f,
+				  0.0f, -1.0f, 0.0f,
+				  0.3f, 0.1f, 0.1f, 
+				  20.0f);
 	spotLightCount++;
 	spotLights[1] = SpotLight(1024, 1024,
-							  0.1, 100, 
-							  1.0f, 1.0f, 1.0f,
-							  0.0f, 0.0f,
-							  0.0f, 2.0f, -4.0f,
-							  0.0f, -1.0f, 0.0f,
-							  0.3f, 0.1f, 0.1f,
-							  20.0f);
+				  0.1, 100, 
+				  1.0f, 1.0f, 1.0f,
+				  0.0f, 0.0f,
+				  0.0f, 2.0f, -4.0f,
+				  0.0f, -1.0f, 0.0f,
+				  0.3f, 0.1f, 0.1f,
+				  20.0f);
 	spotLightCount++;
 
 	std::vector<std::string> skyboxFaces;
@@ -407,7 +407,15 @@ int main()
 		glfwPollEvents();
 
 		camera.keyControl(mainWindow.getKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		GLenum Q = glfwGetKey(mainWindow.getWindow(), GLFW_KEY_Q);
+		if (Q != GLFW_PRESS)
+		{
+			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			glfwSetInputMode(mainWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);//DISABLED, NORMAL, HIDDEN
+		}
+		else {
+			glfwSetInputMode(mainWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);//DISABLED, NORMAL, HIDDEN
+		}
 
 		DirectionalShadowMapPass(&mainLight);
 		for (size_t i = 0; i < pointLightCount; i++)
@@ -421,6 +429,7 @@ int main()
 		RenderPass(projection, camera.calculateViewMatrix());
 		ImGui::Begin("Hello, world!");                         
 		ImGui::Text("helo again");
+		ImGui::Text("hold Q to access UI elements");
 		//add imgui code here:
 
 		ImGui::End();
