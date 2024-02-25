@@ -9,13 +9,12 @@ public:
 	Light(GLfloat shadowWidth, GLfloat shadowHeight,
 		  GLfloat red, GLfloat green, GLfloat blue, 
 		  GLfloat aIntensity, GLfloat dIntensity);
-
-	//for light on/off
-	void SetDiffuseIntensity(GLfloat temp);
-	GLfloat GetDiffuseIntensity();
-
+	
 	ShadowMap* GetShadowMap() { return shadowMap; }
-
+	
+	//for UI 
+	void SetDiffuseIntensity(GLfloat temp);
+	void SetColor(glm::vec3 myColor) { color = myColor; }
 	~Light();
 protected:
 	glm::vec3 color;
