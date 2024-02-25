@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <stdio.h>
@@ -65,8 +68,16 @@ GLfloat lastTime = 0.0f;
 
 Skybox skybox;
 
-//for point light rotations  
+//---------------------UI VARIABLES----------------------//  
 std::vector<float> rotations{ 0.5f * toRadians };
+glm::vec3 DirecColor = { 1.0f, 1.0f, 1.0f };
+glm::vec3 PointColor = { 1.0f, 1.0f, 1.0f };
+bool rotateDlight = false;
+bool rotatePlight = false;
+GLfloat Ddiffuse = 0.5f;
+GLfloat Pdiffuse = 2.0f;
+//---------------------UI VARIABLES----------------------//
+
 
 unsigned int pointLightCount = 0;
 unsigned int spotLightCount = 0;
@@ -159,29 +170,14 @@ void CreateShader()
 
 	omniShadowShader = Shader();
 	omniShadowShader.CreateFromFile("Shaders/omni_shadow_map.vert", "Shaders/omni_shadow_map.geom", "Shaders/omni_shadow_map.frag");
+
 }
 
 void RenderScene()
 {
 	glm::mat4 model(1.0f);
 
-	//model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.5f));
-	//model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
-	//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	//prism1.UseTexture();
-	//shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	//meshList[0]->RenderMesh();
-	//
-	//model = glm::mat4(1.0f);
-	//model = glm::translate(model, glm::vec3(0.0f, 1.0f, -4.5f));
-	//model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
-	//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	//dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	//prism2.UseTexture();
-	//meshList[1]->RenderMesh();
-
+	//for surface :
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(0.0f, -4.0f, -8.5f));
 	model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -190,6 +186,7 @@ void RenderScene()
 	plainTexture.UseTexture();
 	meshList[0]->RenderMesh();
 
+	//for temple :
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(0.0f, -4.0f, -5.5f));
 	model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -198,29 +195,6 @@ void RenderScene()
 	dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 	temple.RenderModel();
 
-	
-
-	//model = glm::mat4(1.0f);
-	//model = glm::translate(model, glm::vec3(-15.0f, -2.0f, 15.0f));
-	//model = glm::scale(model, glm::vec3(0.01, 0.01, 0.01));
-	//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	//shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	//xWing.RenderModel();
-	//
-	//blackHawkAngle += 0.5f;
-	//
-	//if (blackHawkAngle > 360)
-	//	blackHawkAngle = 0.1f;
-	//
-	//model = glm::mat4(1.0f);
-	//model = glm::rotate(model, -blackHawkAngle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-	//model = glm::translate(model, glm::vec3(-5.5f, -0.0f, 0.0f));
-	//model = glm::rotate(model, -toRadians * 25, glm::vec3(0.0f, 0.0f, 1.0f));
-	//model = glm::rotate(model, 90.0f * toRadians, glm::vec3(-1.0f, 0.0f, 0.0f));
-	//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-	//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	//shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	//blackHawk.RenderModel();
 }
 
 void DirectionalShadowMapPass(DirectionalLight *light)
@@ -290,8 +264,8 @@ void RenderPass(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 	glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 	glUniform3f(uniformEyePos, camera.GetCameraPosition().x, camera.GetCameraPosition().y, camera.GetCameraPosition().z);
 
-	shaderList[0].SetDirectionalLight(&mainLight, 0.0f); //
-	shaderList[0].SetPointLights(pointLights, pointLightCount, 3, 0, rotations);
+	shaderList[0].SetDirectionalLight(&mainLight, 0.5f*toRadians, DirecColor, Ddiffuse, rotateDlight); //
+	shaderList[0].SetPointLights(pointLights, pointLightCount, 3, 0, rotations, PointColor, Pdiffuse,rotatePlight);
 	shaderList[0].SetSpotLights(spotLights, spotLightCount, 3 + pointLightCount, pointLightCount);
 	glm::mat4 LightTransform = mainLight.CalculateLightTransform();
 	shaderList[0].SetDirectionalLightTransform(&LightTransform);
@@ -370,17 +344,9 @@ int main()
 
 	skybox = Skybox(skyboxFaces);
 
-	//prism1 = Texture("textures/brick.png");
-	//prism1.LoadTextureA();
-	//prism2 = Texture("textures/dirt.png");
-	//prism2.LoadTextureA();
 	plainTexture = Texture("textures/plain.png");
 	plainTexture.LoadTextureA();
 
-	//xWing = Model();
-	//xWing.LoadModel("../models/x-wing.obj");
-	//blackHawk = Model();
-	//blackHawk.LoadModel("../models/uh60.obj");
 	temple = Model();
 	temple.LoadModel("../models/Japanese_Temple.obj");
 
@@ -397,6 +363,7 @@ int main()
 	ImGui_ImplGlfw_InitForOpenGL(mainWindow.getWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 	ImGui::StyleColorsDark();
+
 	// Loop until window closed
 	while (!mainWindow.getShouldClose())
 	{
@@ -408,9 +375,9 @@ int main()
 
 		camera.keyControl(mainWindow.getKeys(), deltaTime);
 		GLenum Q = glfwGetKey(mainWindow.getWindow(), GLFW_KEY_Q);
-		if (Q != GLFW_PRESS)
+		if (Q == GLFW_RELEASE)
 		{
-			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange(), deltaTime);
 			glfwSetInputMode(mainWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);//DISABLED, NORMAL, HIDDEN
 		}
 		else {
@@ -427,13 +394,18 @@ int main()
 			OmniShadowMapPass(&spotLights[i]);
 		}
 		RenderPass(projection, camera.calculateViewMatrix());
-		ImGui::Begin("Hello, world!");                         
-		ImGui::Text("helo again");
-		ImGui::Text("hold Q to access UI elements");
+		ImGui::Begin("hold Q to access UI elements");
 		//add imgui code here:
-
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+		if (ImGui::Button("toggle rotation of directional light"))
+			rotateDlight = !rotateDlight;
+		if (ImGui::Button("toggle rotation of point light"))
+			rotatePlight = !rotatePlight;
+		ImGui::ColorEdit3("Directional light color ", (float*)&DirecColor);
+		ImGui::ColorEdit3("Point light color ", (float*)&PointColor);
+		ImGui::SliderFloat("Directional diffuse", &Ddiffuse, 0.0f, 5.0f);
+		ImGui::SliderFloat("Point diffuse", &Pdiffuse, 0.0f, 5.0f);
 		ImGui::End();
-
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glUseProgram(0);
