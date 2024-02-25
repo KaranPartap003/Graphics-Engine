@@ -108,20 +108,22 @@ GLuint Shader::GetFarPlaneLocation()
 	return uniformFarPlane;
 }
 
-void Shader::SetDirectionalLight(DirectionalLight* dLight, GLfloat angle)
+void Shader::SetDirectionalLight(DirectionalLight* dLight, GLfloat angle, glm::vec3 myColor,GLfloat dIntensity, bool rotate)
 {
-	//rotating the directional light :
-	// ----------------------#-----------------------//
-	glm::vec3 dir = dLight->GetDirection();
-	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::vec3 rotatedVector = glm::vec3(rotationMatrix * glm::vec4(dir, 1.0f));
-	dLight->SetDirection(rotatedVector);
-	// ----------------------#-----------------------//
+	if (rotate)
+	{
+		glm::vec3 dir = dLight->GetDirection();
+		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::vec3 rotatedVector = glm::vec3(rotationMatrix * glm::vec4(dir, 1.0f));
+		dLight->SetDirection(rotatedVector);
+	}
+	dLight->SetColor(myColor);
+	dLight->SetDiffuseIntensity(dIntensity);
 	dLight->UseLight(uniformDirectionalLight.uniformAmbientIntensity, uniformDirectionalLight.uniformColour,
 				  uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformDirection);
 }
 
-void Shader::SetPointLights(PointLight* pLight, unsigned int lightCount, unsigned int textureUnit, unsigned int offset, std::vector<float> rotate)
+void Shader::SetPointLights(PointLight* pLight, unsigned int lightCount, unsigned int textureUnit, unsigned int offset, std::vector<float> rotate, glm::vec3 myColor, GLfloat dIntensity, bool bRotate)
 {
 	if (lightCount > MAX_POINT_LIGHTS) lightCount = MAX_POINT_LIGHTS;
 
@@ -129,14 +131,15 @@ void Shader::SetPointLights(PointLight* pLight, unsigned int lightCount, unsigne
 
 	for (size_t i = 0; i < lightCount; i++)
 	{
-		
-		//rotating the point light :
-		// ----------------------#-----------------------//
-		glm::vec3 dir = pLight->GetPosition();
-		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), rotate[i], glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::vec3 rotatedVector = glm::vec3(rotationMatrix * glm::vec4(dir, 1.0f));
-		pLight->SetPosition(rotatedVector);
-		// ----------------------#-----------------------//
+		if (bRotate)
+		{
+			glm::vec3 dir = pLight->GetPosition();
+			glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), rotate[i], glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::vec3 rotatedVector = glm::vec3(rotationMatrix * glm::vec4(dir, 1.0f));
+			pLight->SetPosition(rotatedVector);
+		}
+		pLight->SetColor(myColor);
+		pLight->SetDiffuseIntensity(dIntensity);
 		pLight[i].UseLight(uniformPointLight[i].uniformAmbientIntensity, uniformPointLight[i].uniformColour,
 			uniformPointLight[i].uniformDiffuseIntensity, uniformPointLight[i].uniformPosition,
 			uniformPointLight[i].uniformConstant, uniformPointLight[i].uniformLinear, uniformPointLight[i].uniformExponent);
