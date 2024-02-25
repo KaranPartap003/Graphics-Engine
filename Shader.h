@@ -36,8 +36,8 @@ public:
 
 	GLuint GetdirectionalLightDir() { return uniformDirectionalLight.uniformDirection; }
 
-	void SetDirectionalLight(DirectionalLight *dLight,GLfloat angle);
-	void SetPointLights(PointLight *pLight, unsigned int lightCount, unsigned int textureUnit, unsigned int offset, std::vector<float> rotate);
+	void SetDirectionalLight(DirectionalLight *dLight,GLfloat angle, glm::vec3 myColor, GLfloat dIntensity, bool rotate);
+	void SetPointLights(PointLight *pLight, unsigned int lightCount, unsigned int textureUnit, unsigned int offset, std::vector<float> rotate, glm::vec3 myColor, GLfloat dIntensity, bool bRotate);
 	void SetSpotLights(SpotLight *sLight, unsigned int lightCount, unsigned int textureUnit, unsigned int offset);
 	void SetTexture(GLuint textureUnit);
 	void SetDirectionalShadowMap(GLuint textureUnit);
