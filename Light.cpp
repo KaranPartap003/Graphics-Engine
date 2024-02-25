@@ -22,11 +22,6 @@ void Light::SetDiffuseIntensity(GLfloat temp)
 	diffuseIntensity = temp;
 }
 
-GLfloat Light::GetDiffuseIntensity()
-{
-	return diffuseIntensity;
-}
-
 Light::~Light()
 {
 }
