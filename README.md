@@ -14,4 +14,8 @@ My implementation of a graphics engine to test the fundamentals of graphics prog
   - Efficient depth rendering for six faces in one draw call  
   - Adjustable shadow map resolution
 
+- **Skybox**
+  - Implemented a Skybox by rendering a cube around the camera and disabling the depth buffer so that everything else is drawn on top of the skybox
+
+
 demo video : https://www.linkedin.com/feed/update/urn:li:activity:7167542999357280256/
