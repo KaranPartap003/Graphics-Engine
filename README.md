@@ -1,7 +1,7 @@
 ![image](https://github.com/user-attachments/assets/dcf0e7a5-989d-4bb1-aa3d-532305710288)
 
 # A custom Rendering Engine built on top of OpenGL
-My implementation of a graphics engine to test the fundamentals of graphics programming and code c++ knowledge
+My implementation of a graphics engine to test the fundamentals of graphics programming and c++ knowledge.
 
 ## Core Features
 
